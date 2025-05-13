@@ -21,6 +21,16 @@ const WATCH_LIST = [
     size : 'L'
   },
   {
+    name : 'Endurace CF SLX 8 AXS  (L, Stealth)',
+    url  : 'https://www.canyon.com/en-ca/road-bikes/endurance-bikes/endurace/cf-slx/endurace-cf-slx-8-axs-aero/3712.html?dwvar_3712_pv_rahmenfarbe=R077_P01',
+    size : 'L'
+  },
+  {
+    name : 'Endurace CF SLX 8 AXS  (L, Stealth)',
+    url  : 'https://www.canyon.com/en-ca/road-bikes/endurance-bikes/endurace/cf-slx/endurace-cf-slx-8-axs-aero/3712.html?dwvar_3712_pv_rahmenfarbe=R077_P09',
+    size : 'L'
+  },
+  {
     name : 'Endurace CF 7 Di2  (L, Slate)',
     url  : 'https://www.canyon.com/en-ca/road-bikes/endurance-bikes/endurace/cf/endurace-cf-7-di2/4017.html?dwvar_4017_pv_rahmenfarbe=R076_P06',
     size : 'L'

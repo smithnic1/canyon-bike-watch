@@ -4,7 +4,7 @@ permissions:
 
 on:
   schedule:
-    - cron: "*/2 * * * *"   # every 2 min just for the test
+    - cron: "*/15 * * * *"   # every 2 min just for the test
   workflow_dispatch:
 jobs:
   watch:
