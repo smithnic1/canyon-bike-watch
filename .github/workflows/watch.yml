@@ -6,8 +6,8 @@ permissions:
   contents: write        # <-- this line fixes the 403 error
 
 on:
-  schedule:                # every 15 min (UTC)
-    - cron: '*/15 * * * *'
+  schedule:                # every 5 min (UTC)
+    - cron: '*/5 * * * *'
   workflow_dispatch:       # manual “Run workflow” button
 
 jobs:
