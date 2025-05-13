@@ -1,10 +1,14 @@
 # .github/workflows/watch.yml
 name: Canyon-Bike-Watch
 
+# ── allow the workflow’s temporary token to push commits ───────────
+permissions:
+  contents: write        # <-- this line fixes the 403 error
+
 on:
-  schedule:            # every 15 min (UTC)
+  schedule:                # every 15 min (UTC)
     - cron: '*/15 * * * *'
-  workflow_dispatch:
+  workflow_dispatch:       # manual “Run workflow” button
 
 jobs:
   watch:
@@ -14,17 +18,17 @@ jobs:
       # 1 ▸ Check out the repo
       - uses: actions/checkout@v4
 
-      # 2 ▸ Install Node (v20 is LTS as of May-2025)
+      # 2 ▸ Set up Node (v20 LTS)
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm                 # speeds up npm ci
+          cache: npm
 
       # 3 ▸ Install your package-lock deps (playwright, nodemailer, …)
       - name: Install npm packages
         run: npm ci
 
-      # 4 ▸ Install Playwright browsers AND required system libraries
+      # 4 ▸ Install Playwright browser *and* required system libs
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
@@ -36,10 +40,15 @@ jobs:
           EMAIL_TO:   ${{ secrets.EMAIL_TO }}
         run: node watch-canyon.js
 
-      # 6 ▸ Commit state.json only when it changed
+      # 6 ▸ Commit state.json only if it changed
       - name: Save new state
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.email "bot@users.noreply.github.com"
           git config user.name  "Canyon Watch Bot"
-          git diff --quiet || { git add state.json && git commit -m "state update" && git push; }
+          # commit/push only when state.json differs
+          git diff --quiet || { \
+            git add state.json && \
+            git commit -m "state update" && \
+            git push; \
+          }
