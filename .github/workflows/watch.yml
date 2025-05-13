@@ -1,46 +1,32 @@
 # .github/workflows/watch.yml
 name: Canyon-Bike-Watch
-
-# ── allow the workflow’s temporary token to push commits ───────────
 permissions:
-  contents: write        # <-- this line fixes the 403 error
+  contents: write
 
 on:
   schedule:                # every 5 min (UTC)
     - cron: '*/5 * * * *'
-  workflow_dispatch:       # manual “Run workflow” button
-
+  workflow_dispatch:
 jobs:
   watch:
     runs-on: ubuntu-latest
 
     steps:
-      # 1 ▸ Check out the repo
       - uses: actions/checkout@v4
-
-      # 2 ▸ Set up Node (v20 LTS)
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-
-      # 3 ▸ Install your package-lock deps (playwright, nodemailer, …)
       - name: Install npm packages
         run: npm ci
-
-      # 4 ▸ Install Playwright browser *and* required system libs
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
-
-      # 5 ▸ Run the watcher script
       - name: Run watcher
         env:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
           EMAIL_TO:   ${{ secrets.EMAIL_TO }}
         run: node watch-canyon.js
-
-      # 6 ▸ Commit state.json only if it changed
       - name: Save new state
         if: github.ref == 'refs/heads/main'
         run: |
