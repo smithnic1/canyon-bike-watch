@@ -1,25 +1,34 @@
+# .github/workflows/watch.yml
 name: Canyon-Bike-Watch
 
 on:
-  schedule:            # UTC — every 15 min
+  schedule:            # every 15 min (UTC)
     - cron: '*/15 * * * *'
   workflow_dispatch:
 
 jobs:
   watch:
     runs-on: ubuntu-latest
+
     steps:
+      # 1 ▸ Check out the repo
       - uses: actions/checkout@v4
 
-      # Install JS deps (playwright + nodemailer) from package-lock.json
-      - name: Install npm dependencies
+      # 2 ▸ Install Node (v20 is LTS as of May-2025)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm                 # speeds up npm ci
+
+      # 3 ▸ Install your package-lock deps (playwright, nodemailer, …)
+      - name: Install npm packages
         run: npm ci
 
-      # Install Playwright browsers & system libs
-      - uses: microsoft/playwright-github-action@v1
-        with:
-          install-deps: true
+      # 4 ▸ Install Playwright browsers AND required system libraries
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
 
+      # 5 ▸ Run the watcher script
       - name: Run watcher
         env:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
@@ -27,7 +36,7 @@ jobs:
           EMAIL_TO:   ${{ secrets.EMAIL_TO }}
         run: node watch-canyon.js
 
-      # Commit state.json only if it changed
+      # 6 ▸ Commit state.json only when it changed
       - name: Save new state
         if: github.ref == 'refs/heads/main'
         run: |
