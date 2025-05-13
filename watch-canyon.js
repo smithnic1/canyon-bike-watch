@@ -18,7 +18,7 @@ const WATCH_LIST = [
   {
     name : 'Endurace CF SLX 8 Di2  (L, Desert Grey)',
     url  : 'https://www.canyon.com/en-ca/road-bikes/endurance-bikes/endurace/cf-slx/endurace-cf-slx-8-di2/3711.html?dwvar_3711_pv_rahmenfarbe=R077_P09',
-    size : 'XL'
+    size : 'L'
   },
   {
     name : 'Endurace CF 7 Di2  (L, Slate)',
