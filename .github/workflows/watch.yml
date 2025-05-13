@@ -1,0 +1,36 @@
+name: Canyon-Bike-Watch
+
+on:
+  schedule:            # UTC — every 15 min
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Install JS deps (playwright + nodemailer) from package-lock.json
+      - name: Install npm dependencies
+        run: npm ci
+
+      # Install Playwright browsers & system libs
+      - uses: microsoft/playwright-github-action@v1
+        with:
+          install-deps: true
+
+      - name: Run watcher
+        env:
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          EMAIL_TO:   ${{ secrets.EMAIL_TO }}
+        run: node watch-canyon.js
+
+      # Commit state.json only if it changed
+      - name: Save new state
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.email "bot@users.noreply.github.com"
+          git config user.name  "Canyon Watch Bot"
+          git diff --quiet || { git add state.json && git commit -m "state update" && git push; }
