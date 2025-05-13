@@ -1,9 +1,0 @@
-name: schedule-test
-on:
-  schedule:
-    - cron: '*/2 * * * *'   # every 2 min
-jobs:
-  poke:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "It works – $(date -u)"
