@@ -1,11 +1,10 @@
-# .github/workflows/watch.yml
 name: Canyon-Bike-Watch
 permissions:
   contents: write
 
 on:
-  schedule:                # every 5 min (UTC)
-    - cron: '*/2 * * * *'
+  schedule:
+    - cron: "*/2 * * * *"   # every 2 min just for the test
   workflow_dispatch:
 jobs:
   watch:
