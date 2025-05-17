@@ -11,9 +11,14 @@ import path from 'path';
 //    • size: the exact size tile text (S, M, L, XL, 2XS, …)
 const WATCH_LIST = [
   {
-    name: 'Endurace CF 8 Di2  (L, Slate)',
-    url: 'https://www.canyon.com/en-ca/road-bikes/endurance-bikes/endurace/cf/endurace-cf-8-di2/4352.html?dwvar_4352_pv_rahmenfarbe=R076_P06',
-    size: 'L'
+    name: 'Endurace CF 7 RAW  (S, Cold Cactus)',
+    url: 'https://www.canyon.com/en-ca/road-bikes/endurance-bikes/endurace/al/endurace-7-raw/3705.html?dwvar_3705_pv_rahmenfarbe=R074_P05',
+    size: 'S'
+  },
+  {
+    name: 'Endurace CF 7 RAW  (S, New Stealth)',
+    url: 'https://www.canyon.com/en-ca/road-bikes/endurance-bikes/endurace/al/endurace-7-raw/3705.html?dwvar_3705_pv_rahmenfarbe=R074_P06',
+    size: 'S'
   },
 ];
 // ────────────────────────────────────────────────────────────
