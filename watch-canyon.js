@@ -11,13 +11,8 @@ import path from 'path';
 //    • size: the exact size tile text (S, M, L, XL, 2XS, …)
 const WATCH_LIST = [
   {
-    name: 'Endurace CF 7 RAW  (S, Cold Cactus)',
-    url: 'https://www.canyon.com/en-ca/road-bikes/endurance-bikes/endurace/al/endurace-7-raw/3705.html?dwvar_3705_pv_rahmenfarbe=R074_P05',
-    size: 'S'
-  },
-  {
-    name: 'Endurace CF 7 RAW  (S, New Stealth)',
-    url: 'https://www.canyon.com/en-ca/road-bikes/endurance-bikes/endurace/al/endurace-7-raw/3705.html?dwvar_3705_pv_rahmenfarbe=R074_P06',
+    name: 'Grizl CF 7 (S, R126_P02)',
+    url: 'https://www.canyon.com/en-ca/gravel-bikes/adventure/grizl/cf/grizl-cf-7/4167.html?dwvar_4167_pv_rahmenfarbe=R126_P02',
     size: 'S'
   },
 ];
@@ -25,7 +20,7 @@ const WATCH_LIST = [
 
 const STATE_FILE = path.resolve('state.json');
 const COOKIE_BTN = 'button:has-text("Accept")';
-const SOLDOUT_RE = /--(unpurchasable|notifyMe)/;
+const PURCHASABLE_RE = /\bproductConfiguration__selectVariant--purchasable\b/;
 
 const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
 const page = await browser.newPage();
@@ -33,7 +28,7 @@ let state = JSON.parse(await fs.readFile(STATE_FILE).catch(() => '{}'));
 
 try {
   for (const { name, url, size } of WATCH_LIST) {
-    const tileSel = `button[data-product-size="${size}"]`;
+    const tileSel = `button.js-productConfigurationSelect[data-product-size="${size}"]`;
     await page.goto(url, { waitUntil: 'domcontentloaded' });
 
     const cookieBtn = page.locator(COOKIE_BTN);
@@ -41,18 +36,21 @@ try {
       await cookieBtn.click();
     }
 
-    let classList = '--unpurchasable';
+    // Canyon marks available variants explicitly with --purchasable.
+    // Default to out of stock if the exact size button cannot be found or
+    // does not have that class.
+    let buttonClass = 'productConfiguration__selectVariant--unpurchasable';
     try {
       await page.waitForSelector(tileSel, {
         timeout: 30_000,
         state: 'attached'
       });
-      classList = await page.getAttribute(tileSel, 'class') ?? '';
+      buttonClass = await page.getAttribute(tileSel, 'class') ?? '';
     } catch {
       console.warn(`⚠️  ${name}: tile "${size}" not found – treating as OUT`);
     }
 
-    const inStock = !SOLDOUT_RE.test(classList);
+    const inStock = PURCHASABLE_RE.test(buttonClass);
     const key = `${url}#${size}`;
     const wasInStock = !!state[key];
 
