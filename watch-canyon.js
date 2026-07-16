@@ -21,11 +21,6 @@ const WATCH_LIST = [
     size: 'S'
   },
   {
-    name: 'Grizl CF 7 (L, R126_P01)',
-    url: 'https://www.canyon.com/en-ca/gravel-bikes/adventure/grizl/cf/grizl-cf-7/4167.html?dwvar_4167_pv_rahmenfarbe=R126_P01&dwvar_4167_pv_rahmengroesse=L',
-    size: 'L'
-  },
-  {
     name: 'Grizl CF 6 (S, R126_P02)',
     url: 'https://www.canyon.com/en-ca/gravel-bikes/adventure/grizl/cf/grizl-cf-6/4141.html?dwvar_4141_pv_rahmenfarbe=R126_P02&dwvar_4141_pv_rahmengroesse=S',
     size: 'S'
